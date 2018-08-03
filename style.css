@@ -1,0 +1,59 @@
+body {
+	width: 600px;
+	margin: 25px auto;
+}
+
+h1 {
+	text-align: center;
+	font-family: 'Bubblegum Sans', cursive;
+}
+
+ul {
+	padding-right: 40px;
+	font-family: 'Average Sans', sans-serif;
+}
+
+li {
+	list-style-type: decimal;
+	width: 520px;
+	height: 50px;
+	margin: 0;
+	line-height: 50px;
+	font-size: 20px;
+}
+
+input {
+	width: 300px;
+	height: 20px;
+	border: 1px solid black;
+	border-radius: 8px;
+	text-align: center;
+}
+
+.done {
+	color: green;
+	text-decoration: line-through;
+}
+
+.done-btn {
+	width: 40px;
+	height: 40px;
+	margin: 5px 2.5px;
+	float: right;
+}
+
+.del-btn {
+	width: 40px;
+	height: 40px;
+	margin: 5px 2.5px;
+	float: right;
+}
+
+.add {
+	padding: 10px;
+	text-align: center;
+}
+
+#add-btn {
+	font-family: 'Average Sans', sans-serif;
+}
