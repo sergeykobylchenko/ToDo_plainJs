@@ -41,5 +41,5 @@ const setDoneToDo = (event) => {
 	// console.log(doneItem);
 	let item = event.target;
 	let parent = item.parentElement;
-	parent.className = "done";
+	parent.classList.toggle("done");
 }
