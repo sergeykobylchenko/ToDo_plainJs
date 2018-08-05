@@ -5,7 +5,7 @@ const addButton = document.querySelector('#add-btn')
 const newToDo = () => {
 	let newLi = document.createElement('li');
 	let taskInputValue = taskInput.value;
-	newLi.textContent = taskInputValue
+	newLi.textContent = taskInputValue;
 	
 	taskInputValue ? list.appendChild(newLi) : alert("Try again!");
 	
@@ -24,6 +24,8 @@ const newToDo = () => {
 	delBtn.className = "del-btn";
 	newLi.appendChild(delBtn);
 	delBtn.addEventListener('click', setDeletedToDo);
+
+	// newLi.addEventListener('click', editToDO);
 }
 
 addButton.addEventListener('click', newToDo);
@@ -42,4 +44,15 @@ const setDoneToDo = (event) => {
 	let item = event.target;
 	let parent = item.parentElement;
 	parent.classList.toggle("done");
+}
+
+const editToDO = () => {
+	let item = event.target;
+	let parent = item.parentElement;
+
+	let newInput = document.createElement('input')
+	// parentElem.replaceChild(newElem, elem)
+	item.appendChild(newInput)	
+
+	item.textContent = newInput.value;
 }
