@@ -7,40 +7,62 @@ const newToDo = () => {
 	let taskInputValue = taskInput.value;
 	newLi.textContent = taskInputValue;
 	
-	taskInputValue ? list.appendChild(newLi) : alert("Try again!");
+	inputCheck(taskInputValue) ? list.appendChild(newLi) : alert("Try again!");
 	
 	taskInput.value = "";
 	
-	let doneBtn = document.createElement('button');
-	doneBtn.textContent = "\u2713";
-	// doneBtn.textContent = "It's Done!";
-	doneBtn.className = "done-btn";
+	const doneBtn = createDoneButton();
 	newLi.appendChild(doneBtn);
 	doneBtn.addEventListener('click', setDoneToDo);
 
-	let delBtn = document.createElement('button');
-	delBtn.textContent = "\u2717";
-	// delBtn.textContent = "Delete It!";
-	delBtn.className = "del-btn";
+	const delBtn = createDeleteButton();
 	newLi.appendChild(delBtn);
 	delBtn.addEventListener('click', setDeletedToDo);
 
-	// newLi.addEventListener('click', editToDO);
+	let editBox = document.createElement("div");
+	editBox.className = "edit-box";
+	newLi.appendChild(editBox);
+	newLi.addEventListener('dblclick', editToDO);
+
+	let editInput = document.createElement("input");
+	editInput.type = "text";
+	editBox.appendChild(editInput);
+/* 	let cancelBtn = document.createElement("span");
+	cancelBtn.textContent = "\u2717";
+	cancelBtn.className = "cancel-btn";
+	editBox.appendChild(cancelBtn); */
+	editInput.addEventListener('keyup', (e) => {	
+		if (e.keyCode === 13){
+			if (inputCheck(editInput.value)) {
+				newLi.firstChild.textContent = editInput.value;
+				editBox.classList.toggle("edit-box");
+				editInput.value = "";
+				newLi.classList.toggle("edit-mode");
+			} else {
+				alert('Try again!')
+			}
+		} else if (e.keyCode === 27) {
+			editBox.classList.toggle("edit-box");
+			editInput.value = "";
+			newLi.classList.toggle("edit-mode");
+		}
+	});
 }
 
 addButton.addEventListener('click', newToDo);
+taskInput.addEventListener('keyup', (e) => {
+	if (e.keyCode === 13) {
+		newToDo();
+	}
+});
 
 const setDeletedToDo = (event) => {
-	// let deleteItem = document.querySelectorAll(".del-btn");
-	// console.log(deleteItem);
 	let item = event.target;
 	let parent = item.parentElement;
 	parent.remove();
 }
 
 const setDoneToDo = (event) => {
-	// let doneItem = document.querySelectorAll(".done-btn");
-	// console.log(doneItem);
 	let item = event.target;
 	let parent = item.parentElement;
 	parent.classList.toggle("done");
@@ -48,11 +70,31 @@ const setDoneToDo = (event) => {
 
 const editToDO = () => {
 	let item = event.target;
-	let parent = item.parentElement;
+	item.classList.toggle("edit-mode");
+	let editBox = item.querySelector(".edit-box");
+	editBox.classList.toggle("edit-box");
+}
 
-	let newInput = document.createElement('input')
-	// parentElem.replaceChild(newElem, elem)
-	item.appendChild(newInput)	
+const createDeleteButton = () => {
+	let delBtn = document.createElement('button');
+	delBtn.textContent = "\u2717";
+	delBtn.className = "del-btn";
+	return delBtn;
+}
 
-	item.textContent = newInput.value;
+const createDoneButton = () => {
+	let doneBtn = document.createElement('button');
+	doneBtn.textContent = "\u2713";
+	doneBtn.className = "done-btn";
+	return doneBtn;
+}
+
+const inputCheck = (task) => {
+	if (!task) {
+		false;
+	} else if (parseInt(task)) {
+		return false;
+	} else {
+		return true;
+	}
 }

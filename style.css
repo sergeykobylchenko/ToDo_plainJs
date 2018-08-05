@@ -3,6 +3,15 @@ body {
 	margin: 25px auto;
 }
 
+button {
+	border-radius: 5px;
+	background: none;
+}
+
+button:focus {
+	outline: none;
+}
+
 h1 {
 	text-align: center;
 	font-family: 'Bubblegum Sans', cursive;
@@ -30,6 +39,10 @@ input {
 	text-align: center;
 }
 
+input:focus {
+	outline: none;
+}
+
 .done {
 	color: green;
 	text-decoration: line-through;
@@ -43,11 +56,13 @@ input {
 }
 
 .done-btn:hover {
-	color: #0FC57C;
+	color: green;
+	background-color: #ccffcc;
 }
 
 .del-btn:hover {
 	color: red;
+	background-color: #ffb3b3;
 }
 
 .del-btn {
@@ -55,6 +70,14 @@ input {
 	height: 40px;
 	margin: 5px 2.5px;
 	float: right;
+}
+
+.edit-box {
+	display: none;
+}
+
+.edit-mode {
+	margin-bottom: 20px;
 }
 
 .add {
@@ -65,4 +88,9 @@ input {
 #add-btn {
 	font-family: 'Average Sans', sans-serif;
 	outline: none;
+}
+
+#add-btn:hover {
+	background-color: #99d6ff;
+	color: white;
 }
