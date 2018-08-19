@@ -1,3 +1,4 @@
+//-----------View----------
 const list = document.querySelector('#list');
 const taskInput = document.querySelector('#input');
 const addButton = document.querySelector('#add-btn')
@@ -8,11 +9,21 @@ taskInput.addEventListener('keyup', (e) => {
 		newToDo();
 	}
 });
-
+//-------------------------
+//--------Model------------
 let toDo = [];
 
-if (localStorage.getItem('task') != null) {
-	toDo = JSON.parse(localStorage.getItem('task'));
+function addToStorage() {
+	localStorage.setItem('task', JSON.stringify(toDo));
+}
+
+function getFromStorage() {
+	return localStorage.getItem('task');
+}
+//------------------------
+//-------Controller-------
+if (getFromStorage() != null) {
+	toDo = JSON.parse(getFromStorage());
 	toDo.forEach(renderToDo);
 }
 
@@ -21,16 +32,26 @@ function newToDo() {
 	if (inputCheck(taskInputValue)) {
 		const toDoItem = {title: taskInputValue, done: false, editing: false};
 		toDo.push(toDoItem);
-		localStorage.setItem('task', JSON.stringify(toDo));
+		addToStorage();
+		taskInput.placeholder = 'Your next ToDo';
 		renderToDo(toDoItem);
 	} else {
-		alert("Try again!");
+		showErrorMessage();
 	}
 }
 
+function inputCheck(task) {
+	return task && !parseInt(task) && true;
+}
+//-----------------------
+//--------View-----------
 function renderToDo(item) {
 	const newLi = document.createElement('li');
 	list.appendChild(newLi);
+
+	for (let i = 0; i < toDo.length; i++){
+		if (item.done === true) newLi.classList.add("done");
+	}
 	
 	const liText = document.createElement('span') 
 	liText.textContent = item.title;
@@ -57,11 +78,11 @@ function renderToDo(item) {
 	editBox.appendChild(editInput);
 	editInput.addEventListener('keyup', setToDoEdeted);
 }
-
+//--------View / Controller--------
 function setToDoEdeted(e) {
-	let editInput = event.target;
-	let currentLi = document.querySelector('.edit-mode');
-	let editBox = editInput.parentElement; 
+	const editInput = event.target;
+	const currentLi = document.querySelector('.edit-mode');
+	const editBox = editInput.parentElement; 
 	
 	if (e.keyCode === 13){
 		if (inputCheck(editInput.value)) {
@@ -77,7 +98,7 @@ function setToDoEdeted(e) {
 				}
 			}
 		} else {
-			alert('Try again!')
+			showErrorMessage();
 		}
 	} else if (e.keyCode === 27) {
 		editBox.classList.toggle("edit-box");
@@ -85,7 +106,7 @@ function setToDoEdeted(e) {
 		currentLi.classList.toggle("edit-mode");
 	}
 
-	localStorage.setItem('task', JSON.stringify(toDo));
+	addToStorage();
 }
 
 function setDeletedToDo() {
@@ -98,7 +119,7 @@ function setDeletedToDo() {
 		}
 	});
 
-	localStorage.setItem('task', JSON.stringify(toDo));
+	addToStorage();
 
 	parent.remove();
 }
@@ -113,26 +134,31 @@ function setDoneToDo(event) {
 			return item.done ? item.done = false : item.done = true;
 		}
 	});
-	
-	localStorage.setItem('task', JSON.stringify(toDo));
+
+	addToStorage();
 }
 
 function editToDO() {
 	const targetItem = event.target;
 	const element = targetItem.parentElement;
 	element.classList.toggle("edit-mode");
-	let editBox = element.querySelector(".edit-box");
+	const editBox = element.querySelector(".edit-box");
 	editBox.classList.toggle("edit-box");
+
+	for (let i = 0; i < toDo.length; i++){
+		if (toDo[i].done === true) element.classList.remove("done")
+	}
 
 	toDo.forEach((item) => {
 		if (item.title == element.firstChild.textContent) {
-			return item.editing ? item.editing = false : item.editing = true;
+			item.editing ? item.editing = false : item.editing = true;
+			item.done = false;
 		}
 	});
-	
-	localStorage.setItem('task', JSON.stringify(toDo));
-}
 
+	addToStorage();
+}
+//---------View----------
 function createDeleteButton() {
 	const delBtn = document.createElement('button');
 	delBtn.textContent = "\u2717";
@@ -147,6 +173,17 @@ function createDoneButton() {
 	return doneBtn;
 }
 
-function inputCheck(task) {
-	return task && !parseInt(task) && true;
+function showErrorMessage () {
+	const currentItem = event.target;
+
+	currentItem.className = 'error';
+	currentItem.value = 'Try smth usefull!';
+	currentItem.blur();
+
+	currentItem.onfocus = () => {
+		currentItem.className = '';
+		currentItem.value = '';
+		currentItem.placeholder = 'Ohh! Another try!';
+	}
 }
+//------------------------
